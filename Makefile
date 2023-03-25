@@ -7,13 +7,17 @@ BINDIR=bin
 SRCDIR=src
 OBJDIR=obj
 APP=$(BINDIR)/engine
-OBJ=$(OBJDIR)/main.o
+OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o
 
 $(APP): $(OBJ)
 	mkdir -p $(BINDIR)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 $(OBJDIR)/main.o: $(SRCDIR)/main.cpp
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/Game.o: $(SRCDIR)/Game.cpp
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
