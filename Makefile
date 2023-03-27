@@ -10,23 +10,23 @@ APP=$(BINDIR)/engine
 OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o
 
 $(APP): $(OBJ)
-	mkdir -p $(BINDIR)
+	@mkdir -p $(BINDIR)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-$(OBJDIR)/main.o: $(SRCDIR)/main.cpp
-	mkdir -p $(OBJDIR)
+$(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(SRCDIR)/constants.hpp
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(OBJDIR)/Game.o: $(SRCDIR)/Game.cpp
-	mkdir -p $(OBJDIR)
+$(OBJDIR)/Game.o: $(SRCDIR)/Game.cpp $(SRCDIR)/Game.hpp $(SRCDIR)/constants.hpp
+	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 .PHONY: clean
 clean:
-	rm -rf $(APP)
-	rm -rf $(OBJ)
-	rmdir $(BINDIR)
-	rmdir $(OBJDIR)
+	@rm -rf $(APP)
+	@rm -rf $(OBJ)
+	@rmdir $(BINDIR)
+	@rmdir $(OBJDIR)
 
 .PHONY: run
 run:

@@ -1,6 +1,10 @@
 #ifndef ENGINE_GAME_H
 #define ENGINE_GAME_H
 
+#include <SDL2/SDL.h>
+
+#include <string>
+
 class Game
 {
 public:
@@ -9,14 +13,32 @@ public:
   // Constructors / destructors
   //
 
-  Game();
+  Game(std::string windowTitle, int windowWidth, int windowHeight);
   ~Game();
+
+  bool run();
+
+private:
 
   //
   // Accessors
   //
 
   bool isRunning() { return m_running; }
+
+  //
+  // Setup / teardown
+  //
+
+  /**
+   *
+   */
+  void init();
+
+  /**
+   *
+   */
+  void clean();
 
   //
   // Main loop
@@ -37,10 +59,18 @@ public:
    */
   void render();
 
-private:
-
   bool m_running; // Main loop sentinel
 
+  SDL_Window    *m_pWindow;
+  SDL_Renderer  *m_pRenderer;
+
+  // Window
+
+private:
+
+  std::string m_windowTitle;
+  int         m_windowWidth;
+  int         m_windowHeight;
 };
 
 #endif

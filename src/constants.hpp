@@ -1,0 +1,11 @@
+#ifndef ENGINE_CONSTANTS_H
+#define ENGINE_CONSTANTS_H
+
+// Window clear color
+
+Uint8 WINDOW_CLEAR_RED = 0x64;
+Uint8 WINDOW_CLEAR_GREEN = 0x95;
+Uint8 WINDOW_CLEAR_BLUE = 0xED;
+Uint8 WINDOW_CLEAR_ALPHA = 0xFF;
+
+#endif
