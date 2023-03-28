@@ -13,10 +13,10 @@ public:
   // Constructors / destructors
   //
 
-  Game(std::string windowTitle, int windowWidth, int windowHeight);
+  Game(std::string windowTitle, int windowWidth, int windowHeight, bool windowFullScreen = false);
   ~Game();
 
-  bool run();
+  int run();
 
 private:
 
@@ -31,12 +31,12 @@ private:
   //
 
   /**
-   *
+   *  @brief Initializes SDL libraries, creates window and creates renderer
    */
-  void init();
+  bool init();
 
   /**
-   *
+   *  @brief Frees objects allocated by SDL
    */
   void clean();
 
@@ -71,6 +71,7 @@ private:
   std::string m_windowTitle;
   int         m_windowWidth;
   int         m_windowHeight;
+  int         m_windowFullScreen;
 };
 
 #endif

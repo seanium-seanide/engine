@@ -7,30 +7,21 @@
 
 #include "constants.hpp"
 
-Game::Game(std::string windowTitle, int windowWidth, int windowHeight)
+Game::Game(std::string windowTitle, int windowWidth, int windowHeight, bool windowFullScreen)
 : m_running(false)
 , m_pWindow(nullptr)
 , m_pRenderer(nullptr)
 , m_windowTitle(windowTitle)
 , m_windowWidth(windowWidth)
 , m_windowHeight(windowHeight)
+, m_windowFullScreen(windowFullScreen)
 {
-  // Setup
-  this->init();
-
-  while (this->isRunning())
-  {
-    this->handleEvents();
-    this->update();
-    this->render();
-  }
-
-  // Teardown
-  //game.clean();
+  //this->run();
 }
 
 Game::~Game()
 {
+  // Teardown
   this->clean();
 }
 
@@ -84,17 +75,24 @@ void Game::render()
   SDL_RenderPresent(m_pRenderer);
 }
 
-void Game::init()
+bool Game::init()
 {
   // Initialize SDL
 
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
   {
     fprintf(stderr, "Failed to initialize SDL2: %s\n", SDL_GetError());
-    exit(EXIT_FAILURE);
+    return false;
   }
 
   // Create window
+
+  // Flags
+  Uint32 windowFlags = SDL_WINDOW_SHOWN;
+  if (m_windowFullScreen)
+  {
+    windowFlags = windowFlags | SDL_WINDOW_FULLSCREEN;
+  }
 
   m_pWindow = SDL_CreateWindow(
     m_windowTitle.c_str()
@@ -102,13 +100,13 @@ void Game::init()
     , SDL_WINDOWPOS_CENTERED
     , m_windowWidth
     , m_windowHeight
-    , SDL_WINDOW_SHOWN
+    , windowFlags
   );
 
   if (m_pWindow == nullptr)
   {
     fprintf(stderr, "Failed to create window: %s\n", SDL_GetError());
-    exit(EXIT_FAILURE);
+    return false;
   }
 
   // Create renderer
@@ -118,12 +116,10 @@ void Game::init()
   if (m_pRenderer == nullptr)
   {
     fprintf(stderr, "Failed to create renderer: %s\n", SDL_GetError());
-    exit(EXIT_FAILURE);
+    return false;
   }
 
-  // Start game loop
-
-  m_running = true;
+  return true;
 }
 
 void Game::clean()
@@ -133,6 +129,25 @@ void Game::clean()
   SDL_Quit();
 }
 
-bool Game::run()
+int Game::run()
 {
+  // Setup
+
+  if (!(this->init()))
+  {
+    return -1;
+  }
+
+  // Main loop
+
+  m_running = true;
+
+  while (this->isRunning())
+  {
+    this->handleEvents();
+    this->update();
+    this->render();
+  }
+
+  return 0;
 }
