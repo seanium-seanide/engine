@@ -13,7 +13,7 @@ public:
   // Constructors / destructors
   //
 
-  Game(std::string windowTitle, int windowWidth, int windowHeight, bool windowFullScreen = false);
+  Game(std::string windowTitle, int windowWidth, int windowHeight);
   ~Game();
 
   int run();
@@ -71,7 +71,6 @@ private:
   std::string m_windowTitle;
   int         m_windowWidth;
   int         m_windowHeight;
-  int         m_windowFullScreen;
 };
 
 #endif

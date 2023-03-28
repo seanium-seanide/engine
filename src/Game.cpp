@@ -7,16 +7,14 @@
 
 #include "constants.hpp"
 
-Game::Game(std::string windowTitle, int windowWidth, int windowHeight, bool windowFullScreen)
+Game::Game(std::string windowTitle, int windowWidth, int windowHeight)
 : m_running(false)
 , m_pWindow(nullptr)
 , m_pRenderer(nullptr)
 , m_windowTitle(windowTitle)
 , m_windowWidth(windowWidth)
 , m_windowHeight(windowHeight)
-, m_windowFullScreen(windowFullScreen)
 {
-  //this->run();
 }
 
 Game::~Game()
@@ -89,10 +87,6 @@ bool Game::init()
 
   // Flags
   Uint32 windowFlags = SDL_WINDOW_SHOWN;
-  if (m_windowFullScreen)
-  {
-    windowFlags = windowFlags | SDL_WINDOW_FULLSCREEN;
-  }
 
   m_pWindow = SDL_CreateWindow(
     m_windowTitle.c_str()
