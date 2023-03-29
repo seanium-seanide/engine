@@ -14,11 +14,16 @@ Game::Game(std::string windowTitle, int windowWidth, int windowHeight)
 , m_windowTitle(windowTitle)
 , m_windowWidth(windowWidth)
 , m_windowHeight(windowHeight)
+  // ### TEMP ###
+, m_rider()
 {
 }
 
 Game::~Game()
 {
+  // Free assets
+  this->freeAssets();
+
   // Teardown
   this->clean();
 }
@@ -70,6 +75,13 @@ void Game::render()
   );
 
   SDL_RenderClear(m_pRenderer);
+
+  // Draw rider
+
+  SDL_RenderCopy(m_pRenderer, m_rider.pTexture, &m_rider.srcRect, &m_rider.dstRect);
+
+  // Flip framebuffer
+
   SDL_RenderPresent(m_pRenderer);
 }
 
@@ -123,11 +135,40 @@ void Game::clean()
   SDL_Quit();
 }
 
+// ### TEMP ###
+bool Game::loadAssets()
+{
+  if (!loadTexture(&m_rider.pTexture, "assets/rider.bmp"))
+  {
+    return false;
+  }
+
+  // Source rectangle
+
+  m_rider.srcRect.x = 0;
+  m_rider.srcRect.y = 0;
+  SDL_QueryTexture(m_rider.pTexture, nullptr, nullptr, &m_rider.srcRect.w, &m_rider.srcRect.h);
+
+  // Destination rectangle
+
+  m_rider.dstRect.x = 0;
+  m_rider.dstRect.y = 0;
+  m_rider.dstRect.w = m_rider.srcRect.w;
+  m_rider.dstRect.h = m_rider.srcRect.h;
+
+  return true;
+}
+
 int Game::run()
 {
   // Setup
 
   if (!(this->init()))
+  {
+    return -1;
+  }
+
+  if (!(this->loadAssets()))
   {
     return -1;
   }
@@ -144,4 +185,25 @@ int Game::run()
   }
 
   return 0;
+}
+
+bool Game::loadTexture(SDL_Texture **ppTexture, std::string filename)
+{
+  SDL_Surface *pTempSurface = SDL_LoadBMP(filename.c_str());
+  if (pTempSurface == nullptr)
+  {
+    fprintf(stderr, "Failed to load BMP file %s: %s\n", filename.c_str(), SDL_GetError());
+    return false;
+  }
+
+  *ppTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
+
+  SDL_FreeSurface(pTempSurface);
+
+  return true;
+}
+
+void Game::freeAssets()
+{
+  SDL_DestroyTexture(m_rider.pTexture);
 }
