@@ -1,6 +1,9 @@
 ---
-title: UML Class Diagrams
+title: Notes
 ---
+
+UML Class Diagrams
+==================
 
 * The Univied Modeling Language (UML)
   - Provides a set of standard diagrams for graphically depicting
@@ -42,3 +45,16 @@ title: UML Class Diagrams
   - The return time is omitted for constructors and destructors:
     + Rectangle() :
     + ~rectangle() :
+
+libpng warning
+==============
+
+Warning message
+: libpng warning: iCCP: known incorrect sRGB profile
+
+Solution
+: *mogrify* the png file
+
+  ```bash
+  $ mogrify file.png
+  ```
