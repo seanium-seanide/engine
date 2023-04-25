@@ -7,7 +7,7 @@ BINDIR=bin
 SRCDIR=src
 OBJDIR=obj
 APP=$(BINDIR)/engine
-OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o
+OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o
 
 $(APP): $(OBJ)
 	@mkdir -p $(BINDIR)
@@ -18,6 +18,10 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.cpp $(SRCDIR)/constants.hpp
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/Game.o: $(SRCDIR)/Game.cpp $(SRCDIR)/Game.hpp $(SRCDIR)/constants.hpp
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/TextureManager.o: $(SRCDIR)/TextureManager.cpp $(SRCDIR)/TextureManager.hpp
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 

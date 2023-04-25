@@ -9,32 +9,45 @@ class Game
 {
 public:
 
+  /**
+   *  @brief Constructor.
+   */
   Game(std::string windowTitle, int windowWidth, int windowHeight);
+
+  /**
+   *  @brief Default destructor.
+   */
   ~Game();
 
+  /**
+   *  @brief Run game.
+   */
   int run();
 
 private:
 
+  /**
+   *  @brief Running state accessor.
+   */
   bool isRunning() { return m_running; }
 
   /**
-   *  @brief Initializes SDL libraries, creates window and creates renderer
+   *  @brief Initializes SDL libraries, creates window and creates renderer.
    */
   bool init();
 
   /**
-   *  @brief Frees objects allocated by SDL
+   *  @brief Frees objects allocated by SDL.
    */
   void clean();
 
   /**
-   *  @brief Load SDL assets
+   *  @brief Load SDL assets.
    */
   bool loadAssets();
 
   /**
-   *  @brief Free SDL assets
+   *  @brief Free SDL assets.
    */
   void freeAssets();
 
