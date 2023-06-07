@@ -1,4 +1,4 @@
-CC=g++
+CC=clang++
 CFLAGS=-W -Wall -std=c++14
 LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer
 

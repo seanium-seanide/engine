@@ -16,11 +16,12 @@ An simple 2D C++ game engine.
 
 ## Dependencies
 
+* A C++ compiler supporting C++14 (e.g. clang++, g++)
+* GNU make
 * SDL2
 * SDL2\_image
 * SDL2\_mixer
 * SDL2\_ttf
-* GNU make
 
 ## Compilation
 
