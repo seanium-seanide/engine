@@ -1,12 +1,19 @@
+/**
+ * @file Game.hpp
+ */
+
 #include "Game.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-
 #include <cstdio>
 #include <cstdlib>
 
 #include "constants.hpp"
+#include "Player.hpp"
+#include "Enemy.hpp"
+
+Game *Game::s_pInstance = nullptr;
 
 Game::Game(std::string windowTitle, int windowWidth, int windowHeight)
 : m_running(false)
@@ -15,78 +22,12 @@ Game::Game(std::string windowTitle, int windowWidth, int windowHeight)
 , m_windowTitle(windowTitle)
 , m_windowWidth(windowWidth)
 , m_windowHeight(windowHeight)
-, m_pTigerAnimationTexture(nullptr)
 {
 }
 
 Game::~Game()
 {
-  freeAssets();
   clean();
-}
-
-void Game::handleEvents()
-{
-  SDL_Event event;
-
-  while (SDL_PollEvent(&event))
-  {
-    switch (event.type)
-    {
-    case SDL_QUIT:
-      m_running = false;
-      break;
-
-    case SDL_KEYDOWN:
-      switch (event.key.keysym.sym)
-      {
-      case SDLK_ESCAPE:
-        m_running = false;
-        break;
-
-      default:
-        break;
-      }
-      break;
-
-    default:
-      break;
-    }
-  }
-}
-
-void Game::update()
-{
-  // Frame updates every (1000 / 100) ms = every 10th of a second
-  m_tigerCurrentFrame = static_cast<int>(SDL_GetTicks() / 100) % m_tigerNumFrames;
-  m_tigerSrcRect.x = m_tigerCurrentFrame * m_tigerFrameWidth;
-}
-
-void Game::render()
-{
-  SDL_SetRenderDrawColor(
-    m_pRenderer
-    , WINDOW_CLEAR_RED
-    , WINDOW_CLEAR_GREEN
-    , WINDOW_CLEAR_BLUE
-    , WINDOW_CLEAR_ALPHA
-  );
-  SDL_RenderClear(m_pRenderer);
-
-  //SDL_RendererFlip tigerFlipFlags 
-  //  = static_cast<SDL_RendererFlip>(SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL);
-  SDL_RendererFlip tigerFlipFlags = SDL_FLIP_NONE;
-  SDL_RenderCopyEx(
-    m_pRenderer
-    , m_pTigerAnimationTexture
-    , &m_tigerSrcRect
-    , &m_tigerDstRect
-    , 0 // Ex
-    , 0 // Ex
-    , tigerFlipFlags // Ex
-  );
-
-  SDL_RenderPresent(m_pRenderer);
 }
 
 bool Game::init()
@@ -124,6 +65,9 @@ bool Game::init()
 
 void Game::clean()
 {
+  freeAssets();
+  freeEntities();
+
   SDL_DestroyRenderer(m_pRenderer);
   SDL_DestroyWindow(m_pWindow);
   SDL_Quit();
@@ -131,41 +75,36 @@ void Game::clean()
 
 bool Game::loadAssets()
 {
-  // Tiger animation
-
-  m_tigerNumFrames = 6;
-  m_tigerCurrentFrame = 0;
-
-  if (!loadTexture(&m_pTigerAnimationTexture, "assets/graphics/animate-alpha.png"))
-  {
-    return false;
-  }
-
-  int tigerAnimationWidth = 0;
-  int tigerAnimationHeight = 0;
-  SDL_QueryTexture(m_pTigerAnimationTexture, nullptr, nullptr, &tigerAnimationWidth,
-    &tigerAnimationHeight);
-
-  m_tigerFrameWidth = tigerAnimationWidth / m_tigerNumFrames;
-  m_tigerFrameHeight = tigerAnimationHeight;
-
-  m_tigerSrcRect.x = 0;
-  m_tigerSrcRect.y = 0;
-  m_tigerSrcRect.w = m_tigerFrameWidth;
-  m_tigerSrcRect.h = m_tigerFrameHeight;
-
-  m_tigerDstRect.x = 0;
-  m_tigerDstRect.y = 0;
-  m_tigerDstRect.w = m_tigerFrameWidth;
-  m_tigerDstRect.h = m_tigerFrameHeight;
+  TheTextureManager::Instance()->loadTexture(m_pRenderer, "assets/graphics/animate-alpha.png", "animate");
 
   return true;
 }
 
 void Game::freeAssets()
 {
-  // Tiger animation
-  SDL_DestroyTexture(m_pTigerAnimationTexture);
+}
+
+void Game::loadEntities()
+{
+  Entity *entity = new Entity();
+  Player *player = new Player();
+  Enemy *enemy = new Enemy();
+
+  entity->load(100, 300, 128, 82, "animate");
+  player->load(300, 300, 128, 82, "animate");
+  enemy->load(100, 100, 128, 82, "animate");
+
+  m_entities.push_back(entity);
+  m_entities.push_back(player);
+  m_entities.push_back(enemy);
+}
+
+void Game::freeEntities()
+{
+  for (auto entity: m_entities)
+  {
+    entity->clean();
+  }
 }
 
 int Game::run()
@@ -180,30 +119,86 @@ int Game::run()
     return -1;
   }
 
+  loadEntities();
+
+
   m_running = true;
   while (isRunning())
   {
+    Uint32 startTime = SDL_GetTicks();
+
     handleEvents();
     update();
     render();
+
+    Uint32 endTime = SDL_GetTicks();
+
+    Uint32 deltaTime = endTime - startTime;
+    if (deltaTime < FRAME_TIME_MSPF)
+    {
+      SDL_Delay(FRAME_TIME_MSPF - deltaTime);
+    }
   }
 
   return 0;
 }
 
-bool Game::loadTexture(SDL_Texture **ppTexture, std::string filename)
+void Game::handleEvents()
 {
-  //SDL_Surface *pTempSurface = SDL_LoadBMP(filename.c_str());
-  SDL_Surface *pTempSurface = IMG_Load(filename.c_str());
-  if (pTempSurface == nullptr)
+  SDL_Event event;
+
+  while (SDL_PollEvent(&event))
   {
-    fprintf(stderr, "Failed to load BMP file %s: %s\n", filename.c_str(), SDL_GetError());
-    return false;
+    switch (event.type)
+    {
+    case SDL_QUIT:
+      m_running = false;
+      break;
+
+    case SDL_KEYDOWN:
+      switch (event.key.keysym.sym)
+      {
+      case SDLK_ESCAPE:
+        m_running = false;
+        break;
+
+      default:
+        break;
+      }
+      break;
+
+    default:
+      break;
+    }
+  }
+}
+
+void Game::update()
+{
+  for (auto entity : m_entities)
+  {
+    entity->update();
+  }
+}
+
+void Game::render()
+{
+  // Clear background
+  SDL_SetRenderDrawColor(
+    m_pRenderer
+    , WINDOW_CLEAR_RED
+    , WINDOW_CLEAR_GREEN
+    , WINDOW_CLEAR_BLUE
+    , WINDOW_CLEAR_ALPHA
+  );
+  SDL_RenderClear(m_pRenderer);
+
+  // Draw entities
+  for (auto entity : m_entities)
+  {
+    entity->render(m_pRenderer);
   }
 
-  *ppTexture = SDL_CreateTextureFromSurface(m_pRenderer, pTempSurface);
-
-  SDL_FreeSurface(pTempSurface);
-
-  return true;
+  // Flip framebuffer
+  SDL_RenderPresent(m_pRenderer);
 }

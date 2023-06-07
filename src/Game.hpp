@@ -1,76 +1,114 @@
+/**
+ * @file Game.hpp
+ * 
+ * Singleton.
+ */
+
 #ifndef ENGINE_GAME_H
 #define ENGINE_GAME_H
 
+#include <string>
+#include <vector>
+
 #include <SDL2/SDL.h>
 
-#include <string>
+#include "TextureManager.hpp"
+#include "constants.hpp"
+#include "Entity.hpp"
 
 class Game
 {
 public:
 
   /**
-   *  @brief Constructor.
-   */
-  Game(std::string windowTitle, int windowWidth, int windowHeight);
-
-  /**
-   *  @brief Default destructor.
+   * @brief Destructor.
    */
   ~Game();
 
   /**
-   *  @brief Run game.
+   * @brief Main loop entry point.
    */
   int run();
+
+  /**
+   * @brief Singleton: Lazy-initialize the static instance.
+   */
+  static Game *Instance()
+  {
+    if (s_pInstance == nullptr)
+    {
+      s_pInstance = new Game(WIN_TITLE, WIN_WIDTH, WIN_HEIGHT);
+    }
+
+    return s_pInstance;
+  }
 
 private:
 
   /**
-   *  @brief Running state accessor.
+   * @brief Main loop running state accessor
    */
   bool isRunning() { return m_running; }
 
   /**
-   *  @brief Initializes SDL libraries, creates window and creates renderer.
+   * @brief Initialize engine
    */
   bool init();
 
   /**
-   *  @brief Frees objects allocated by SDL.
+   * @brief Teardown engine
    */
   void clean();
 
   /**
-   *  @brief Load SDL assets.
+   * @brief Load game assets
    */
   bool loadAssets();
 
   /**
-   *  @brief Free SDL assets.
+   * @brief Free game assets
    */
   void freeAssets();
 
   /**
-   *  @brief Process events.
+   * @brief Initialize entities
+   */
+  void loadEntities();
+
+  /**
+   * @brief Teardown entities
+   */
+  void freeEntities();
+
+  /**
+   * @brief Main loop: Dispatch events
    */
   void handleEvents();
 
   /**
-   *  @brief Update state of game entities.
+   * @brief Main loop: Update states of entities
    */
   void update();
 
   /**
-   *  @brief Draw current state of game entities to the game window.
+   * @brief Main loop: Render current state of entities
    */
   void render();
 
-  bool m_running; // Main loop sentinel
-
-  bool loadTexture(SDL_Texture **ppTexture, std::string filename);
+  SDL_Renderer *getRenderer() { return m_pRenderer; }
 
 private:
+
+  /**
+   * @brief Singleton: Private constructor
+   */
+  Game(std::string windowTitle, int windowWidth, int windowHeight);
+
+  // Singleton: Class instance
+  static Game *s_pInstance;
+
+  // Main loop sentinel
+  bool m_running; 
 
   SDL_Window    *m_pWindow;
   SDL_Renderer  *m_pRenderer;
@@ -79,14 +117,9 @@ private:
   int         m_windowWidth;
   int         m_windowHeight;
 
-  // Tiger animation
-  SDL_Texture *m_pTigerAnimationTexture;
-  int m_tigerFrameWidth;
-  int m_tigerFrameHeight;
-  int m_tigerNumFrames;
-  int m_tigerCurrentFrame;
-  SDL_Rect m_tigerSrcRect;
-  SDL_Rect m_tigerDstRect;
+  std::vector<Entity *> m_entities;
 };
+
+typedef Game TheGame;
 
 #endif

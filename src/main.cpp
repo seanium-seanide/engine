@@ -1,22 +1,21 @@
+/**
+ * @file main.cpp
+ */
+
 #include <SDL2/SDL.h>
 
+#include <string>
 #include <cstdio>
 
-#include <string>
-
 #include "Game.hpp"
-
-// Window constants
-
-const std::string WIN_TITLE = "Engine";
-const int         WIN_WIDTH = 640;
-const int         WIN_HEIGHT = 480;
-
-// Entry Point
+#include "constants.hpp"
 
 int main()
 {
-  Game game(WIN_TITLE, WIN_WIDTH, WIN_HEIGHT);
+  // TODO: Set title via singleton Game instance
+  //Game game(WIN_TITLE, WIN_WIDTH, WIN_HEIGHT);
 
-  return game.run();
+  int retVal = TheGame::Instance()->run();
+
+  return retVal;
 }

@@ -3,12 +3,19 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#include <iostream>
+
+TextureManager *TextureManager::s_pInstance = nullptr;
+
+using std::cout;
+
 TextureManager::TextureManager()
 {
 }
 
 TextureManager::~TextureManager()
 {
+  clean();
 }
 
 bool TextureManager::loadTexture(SDL_Renderer *pRenderer, std::string filename, std::string id)
@@ -33,15 +40,54 @@ bool TextureManager::loadTexture(SDL_Renderer *pRenderer, std::string filename, 
   return true;
 }
 
-// TODO: Implement
-//bool TextureManager::draw(SDL_Renderer *pRenderer, std::string id, int x, int y,
-//    int width, int height, SDL_RendererFlip flipFlag)
-//{
-//  return true;
-//}
+void TextureManager::draw(SDL_Renderer *pRenderer, std::string id, int x, int y,
+    int width, int height, SDL_RendererFlip flipFlags)
+{
+  SDL_Rect srcRect;
 
-// TODO: Implement
-//bool TextureManager::drawFrame(SDL_Renderer *pRenderer)
-//{
-//  return true;
-//}
+  srcRect.x = 0;
+  srcRect.y = 0;
+  srcRect.w = width;
+  srcRect.h = height;
+
+  SDL_Rect dstRect;
+
+  dstRect.x = x;
+  dstRect.y = y;
+  dstRect.w = width;
+  dstRect.h = height;
+
+  SDL_RenderCopyEx(pRenderer, m_textures[id], &srcRect, &dstRect, 0, 0, flipFlags);
+}
+
+void TextureManager::drawFrame(SDL_Renderer *pRenderer, std::string id, int x, int y, int width,
+    int height, int frame, int row, SDL_RendererFlip flipFlags)
+{
+  SDL_Rect srcRect;
+
+  srcRect.x = frame * width;
+  srcRect.y = row;
+  srcRect.w = width;
+  srcRect.h = height;
+
+  SDL_Rect dstRect;
+
+  dstRect.x = x;
+  dstRect.y = y;
+  dstRect.w = width;
+  dstRect.h = height;
+
+  SDL_RenderCopyEx(pRenderer, m_textures[id], &srcRect, &dstRect, 0, 0, flipFlags);
+}
+
+void TextureManager::clean()
+{
+  // Free textures
+
+  for (auto &pair: m_textures)
+  {
+    SDL_DestroyTexture(pair.second);
+  }
+
+  delete s_pInstance;
+}

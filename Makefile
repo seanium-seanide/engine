@@ -7,7 +7,8 @@ BINDIR=bin
 SRCDIR=src
 OBJDIR=obj
 APP=$(BINDIR)/engine
-OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o
+OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o $(OBJDIR)/Entity.o \
+		$(OBJDIR)/Player.o $(OBJDIR)/Enemy.o 
 
 $(APP): $(OBJ)
 	@mkdir -p $(BINDIR)
@@ -22,6 +23,18 @@ $(OBJDIR)/Game.o: $(SRCDIR)/Game.cpp $(SRCDIR)/Game.hpp $(SRCDIR)/constants.hpp
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/TextureManager.o: $(SRCDIR)/TextureManager.cpp $(SRCDIR)/TextureManager.hpp
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/Entity.o: $(SRCDIR)/Entity.cpp $(SRCDIR)/Entity.hpp
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/Player.o: $(SRCDIR)/Player.cpp $(SRCDIR)/Player.hpp
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/Enemy.o: $(SRCDIR)/Enemy.cpp $(SRCDIR)/Enemy.hpp
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 

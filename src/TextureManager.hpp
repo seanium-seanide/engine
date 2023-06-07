@@ -1,3 +1,6 @@
+#ifndef TEXTUREMANAGER_HPP
+#define TEXTUREMANAGER_HPP
+
 #include <SDL2/SDL.h>
 
 #include <map>
@@ -8,17 +11,12 @@ class TextureManager
 public:
 
   /**
-   * @brief Default constructor
-   */
-  TextureManager();
-
-  /**
    * @brief Default destructor
    */
   ~TextureManager();
 
   /**
-   * @brief
+   * @brief     Load a texture from an image file.
    *
    * @param     pRenderer Rendering context for game window.
    * @param[in] filename  Input image file name.
@@ -28,9 +26,8 @@ public:
    */
   bool loadTexture(SDL_Renderer *pRenderer, std::string filename, std::string id);
 
-  // TODO: Implement
   /**
-   * @brief
+   * @brief     Draw a loaded texture.
    *
    * @param     pRenderer Rendering context for game window.
    * @param[in] id        Texture string ID.
@@ -42,20 +39,57 @@ public:
    *
    * @return `true` on success, `false` on failure.
    */
-  //bool draw(SDL_Renderer *pRenderer, std::string id, int x, int y, int width, int height,
-  //    SDL_RendererFlip flipFlag = SDL_FLIP_NONE);
+  void draw(SDL_Renderer *pRenderer, std::string id, int x, int y, int width, int height,
+      SDL_RendererFlip flipFlags = SDL_FLIP_NONE);
 
-  // TODO: Implement
   /**
-   * @brief
+   * @brief Draw a frame from a loaded texture.
    *
    * @param pRenderer Rendering context for game window.
+   * @param id
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @param frame
+   * @param row
+   * @param flipFlags
    *
    * @return `true` on success, `false` on failure.
    */
-  //bool drawFrame(SDL_Renderer *pRenderer);
+  void drawFrame(SDL_Renderer *pRenderer, std::string id, int x, int y, int width, int height,
+      int frame, int row, SDL_RendererFlip flipFlags = SDL_FLIP_NONE);
+
+  /**
+   * @brief Free textures.
+   */
+  void clean();
+
+  /**
+   * @brief Lazy allocator and accessor for the solitary class instance.
+   */
+  static TextureManager *Instance()
+  {
+    if (s_pInstance == nullptr)
+    {
+      s_pInstance = new TextureManager;
+    }
+
+    return s_pInstance;
+  }
 
 private:
 
+  /**
+   * @brief Private default constructor
+   */
+  TextureManager();
+
   std::map<std::string, SDL_Texture *> m_textures;
+
+  static TextureManager *s_pInstance;
 };
+
+typedef TextureManager TheTextureManager;
+
+#endif
