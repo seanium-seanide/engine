@@ -1,7 +1,6 @@
 # README
 
-An implementation of Shaun Mitchell's simple C++ game engine with improvements
-for pedagogical purposes.
+An simple 2D C++ game engine.
 
 ## Platforms
 
