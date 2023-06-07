@@ -1,16 +1,17 @@
 CC=g++
-
 CFLAGS=-W -Wall -std=c++14
 LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer
 
 BINDIR=bin
 SRCDIR=src
 OBJDIR=obj
-APP=$(BINDIR)/engine
+
+APP=engine
+BIN=$(BINDIR)/$(APP)
 OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o $(OBJDIR)/Entity.o \
 		$(OBJDIR)/Player.o $(OBJDIR)/Enemy.o 
 
-$(APP): $(OBJ)
+$(BIN): $(OBJ)
 	@mkdir -p $(BINDIR)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
@@ -40,11 +41,11 @@ $(OBJDIR)/Enemy.o: $(SRCDIR)/Enemy.cpp $(SRCDIR)/Enemy.hpp
 
 .PHONY: clean
 clean:
-	@rm -rf $(APP)
+	@rm -rf $(BIN)
 	@rm -rf $(OBJ)
 	@rmdir $(BINDIR)
 	@rmdir $(OBJDIR)
 
 .PHONY: run
 run:
-	./$(APP)
+	./$(BIN)
