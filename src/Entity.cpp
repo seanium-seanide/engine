@@ -23,8 +23,8 @@ Entity::~Entity()
 
 void Entity::update()
 {
-  m_currentFrame = static_cast<int>(SDL_GetTicks() / 100 % 6);
-  m_x = m_x + 1;
+  //m_currentFrame = static_cast<int>(SDL_GetTicks() / 100 % 6);
+  //m_x = m_x + 1;
 }
 
 void Entity::render()

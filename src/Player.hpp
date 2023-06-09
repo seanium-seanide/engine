@@ -9,7 +9,7 @@ class Player : public Entity
 {
 public:
 
-  Player();
+  Player(const LoaderParams *pParams);
   ~Player();
 
   /*
@@ -29,7 +29,7 @@ public:
    *
    * Designed to be called once per frame in a game loop.
    */
-  virtual void render(SDL_Renderer *pRenderer);
+  virtual void render();
 };
 
 #endif

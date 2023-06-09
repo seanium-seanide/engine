@@ -7,6 +7,7 @@
 
 #include "TextureManager.hpp"
 #include "AbstractEntity.hpp"
+#include "LoaderParams.hpp"
 
 class Entity : public AbstractEntity
 {

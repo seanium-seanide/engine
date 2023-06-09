@@ -10,8 +10,8 @@
 #include <cstdlib>
 
 #include "constants.hpp"
-//#include "Player.hpp"
-//#include "Enemy.hpp"
+#include "Player.hpp"
+#include "Enemy.hpp"
 #include "LoaderParams.hpp"
 
 Game *Game::s_pInstance = nullptr;
@@ -92,8 +92,14 @@ void Game::loadEntities()
   //enemy->load(100, 100, 128, 82, "animate");
 
   m_entities.push_back(
-    new Entity(
-      new LoaderParams(100, 300, 128, 82, "animate")
+    new Player(
+      new LoaderParams(100, 200, 128, 82, "animate")
+    )
+  );
+
+  m_entities.push_back(
+    new Enemy(
+      new LoaderParams(100, 100, 128, 82, "animate")
     )
   );
 }

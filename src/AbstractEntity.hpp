@@ -1,7 +1,7 @@
 #ifndef CLASS_ABSTRACT_ENTITY_HPP
 #define CLASS_ABSTRACT_ENTITY_HPP
 
-#include "LoaderParams.hpp"
+#include <string>
 
 class AbstractEntity
 {

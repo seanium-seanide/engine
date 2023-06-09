@@ -1,17 +1,12 @@
 #include "Enemy.hpp"
 
-Enemy::Enemy()
-: Entity()
+Enemy::Enemy(const LoaderParams *pParams)
+: Entity(pParams)
 {
 }
 
 Enemy::~Enemy()
 {
-}
-
-void Enemy::load(int x, int y, int width, int height, std::string textureID)
-{
-  Entity::load(x, y, width, height, textureID);
 }
 
 void Enemy::clean()
@@ -25,7 +20,7 @@ void Enemy::update()
   m_y += 1;
 }
 
-void Enemy::render(SDL_Renderer *pRenderer)
+void Enemy::render()
 {
-  Entity::render(pRenderer);
+  Entity::render();
 }
