@@ -14,6 +14,7 @@
 
 #include "TextureManager.hpp"
 #include "constants.hpp"
+#include "AbstractEntity.hpp"
 #include "Entity.hpp"
 
 class Game
@@ -42,6 +43,8 @@ public:
 
     return s_pInstance;
   }
+
+  SDL_Renderer *getRenderer() { return m_pRenderer; }
 
 private:
 
@@ -95,8 +98,6 @@ private:
    */
   void render();
 
-  SDL_Renderer *getRenderer() { return m_pRenderer; }
-
 private:
 
   /**
@@ -117,7 +118,7 @@ private:
   int         m_windowWidth;
   int         m_windowHeight;
 
-  std::vector<Entity *> m_entities;
+  std::vector<AbstractEntity *> m_entities;
 };
 
 typedef Game TheGame;

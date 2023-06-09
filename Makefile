@@ -9,7 +9,9 @@ OBJDIR=obj
 APP=engine
 BIN=$(BINDIR)/$(APP)
 OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o $(OBJDIR)/Entity.o \
-		$(OBJDIR)/Player.o $(OBJDIR)/Enemy.o $(OBJDIR)/AbstractEntity.o $(OBJDIR)/LoaderParams.o
+		$(OBJDIR)/AbstractEntity.o $(OBJDIR)/LoaderParams.o \
+		#$(OBJDIR)/Player.o
+		#$(OBJDIR)/Enemy.o
 
 $(BIN): $(OBJ)
 	@mkdir -p $(BINDIR)
@@ -31,13 +33,13 @@ $(OBJDIR)/Entity.o: $(SRCDIR)/Entity.cpp $(SRCDIR)/Entity.hpp
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(OBJDIR)/Player.o: $(SRCDIR)/Player.cpp $(SRCDIR)/Player.hpp
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+#$(OBJDIR)/Player.o: $(SRCDIR)/Player.cpp $(SRCDIR)/Player.hpp
+#	@mkdir -p $(OBJDIR)
+#	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(OBJDIR)/Enemy.o: $(SRCDIR)/Enemy.cpp $(SRCDIR)/Enemy.hpp
-	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c -o $@ $<
+#$(OBJDIR)/Enemy.o: $(SRCDIR)/Enemy.cpp $(SRCDIR)/Enemy.hpp
+#	@mkdir -p $(OBJDIR)
+#	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/AbstractEntity.o: $(SRCDIR)/AbstractEntity.cpp $(SRCDIR)/AbstractEntity.hpp
 	@mkdir -p $(OBJDIR)

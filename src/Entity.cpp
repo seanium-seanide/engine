@@ -1,12 +1,20 @@
 #include "Entity.hpp"
 
-Entity::Entity()
-: m_x(0)
-, m_y(0)
-, m_width(0)
-, m_height(0)
-, m_textureID()
+#include "Game.hpp"
+
+Entity::Entity(const LoaderParams *pParams)
+: AbstractEntity()
+, m_currentFrame(0)
+, m_currentRow(0)
 {
+  m_x = pParams->getX();
+  m_y = pParams->getY();
+  m_width = pParams->getWidth();
+  m_height = pParams->getHeight();
+  m_textureID = pParams->getTextureID();
+
+  // Clean up!!!
+  delete pParams;
 }
 
 Entity::~Entity()
@@ -19,21 +27,11 @@ void Entity::update()
   m_x = m_x + 1;
 }
 
-void Entity::load(int x, int y, int width, int height, std::string textureID)
+void Entity::render()
 {
-  m_x = x;
-  m_y = y;
-  m_width = width;
-  m_height = height;
-  m_textureID = textureID;
-
-  m_currentFrame = 0;
-  m_currentRow = 0;
-}
-
-void Entity::render(SDL_Renderer *pRenderer)
-{
-  TextureManager::Instance()->drawFrame(pRenderer, m_textureID, m_x, m_y, m_width, m_height,
+  TextureManager::Instance()->drawFrame(//pRenderer
+      TheGame::Instance()->getRenderer()
+      , m_textureID, m_x, m_y, m_width, m_height,
       m_currentFrame, m_currentRow);
 }
 

@@ -7,14 +7,14 @@ class AbstractEntity
 {
 public:
 
-  AbstractEntity(const LoaderParams *pParams);
-  ~AbstractEntity();
-
-  virtual void draw() = 0;
+  virtual void render() = 0;
   virtual void update() = 0;
   virtual void clean() = 0;
 
 protected:
+
+  AbstractEntity();
+  virtual ~AbstractEntity();
 
   int m_x;
   int m_y;

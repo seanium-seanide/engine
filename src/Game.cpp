@@ -10,8 +10,9 @@
 #include <cstdlib>
 
 #include "constants.hpp"
-#include "Player.hpp"
-#include "Enemy.hpp"
+//#include "Player.hpp"
+//#include "Enemy.hpp"
+#include "LoaderParams.hpp"
 
 Game *Game::s_pInstance = nullptr;
 
@@ -86,17 +87,15 @@ void Game::freeAssets()
 
 void Game::loadEntities()
 {
-  Entity *entity = new Entity();
-  Player *player = new Player();
-  Enemy *enemy = new Enemy();
+  //entity->load(100, 300, 128, 82, "animate");
+  //player->load(300, 300, 128, 82, "animate");
+  //enemy->load(100, 100, 128, 82, "animate");
 
-  entity->load(100, 300, 128, 82, "animate");
-  player->load(300, 300, 128, 82, "animate");
-  enemy->load(100, 100, 128, 82, "animate");
-
-  m_entities.push_back(entity);
-  m_entities.push_back(player);
-  m_entities.push_back(enemy);
+  m_entities.push_back(
+    new Entity(
+      new LoaderParams(100, 300, 128, 82, "animate")
+    )
+  );
 }
 
 void Game::freeEntities()
@@ -196,7 +195,7 @@ void Game::render()
   // Draw entities
   for (auto entity : m_entities)
   {
-    entity->render(m_pRenderer);
+    entity->render();
   }
 
   // Flip framebuffer
