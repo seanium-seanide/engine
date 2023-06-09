@@ -13,11 +13,6 @@ public:
   ~Player();
 
   /*
-   * @brief Teardown the entity.
-   */
-  virtual void clean();
-
-  /*
    * @brief Update the state of the entity.
    *
    * Designed to be called once per frame in a game loop.
@@ -30,6 +25,11 @@ public:
    * Designed to be called once per frame in a game loop.
    */
   virtual void render();
+
+  /*
+   * @brief Teardown the entity.
+   */
+  virtual void clean();
 };
 
 #endif

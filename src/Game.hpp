@@ -69,11 +69,6 @@ private:
   bool loadAssets();
 
   /**
-   * @brief Free game assets
-   */
-  void freeAssets();
-
-  /**
    * @brief Initialize entities
    */
   void loadEntities();
@@ -97,8 +92,6 @@ private:
    * @brief Main loop: Render current state of entities
    */
   void render();
-
-private:
 
   /**
    * @brief Singleton: Private constructor

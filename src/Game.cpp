@@ -33,12 +33,14 @@ Game::~Game()
 
 bool Game::init()
 {
+  // Initialize SDL
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
   {
     fprintf(stderr, "Failed to initialize SDL2: %s\n", SDL_GetError());
     return false;
   }
 
+  // Create window
   Uint32 windowFlags = SDL_WINDOW_SHOWN;
   m_pWindow = SDL_CreateWindow(
     m_windowTitle.c_str()
@@ -54,6 +56,7 @@ bool Game::init()
     return false;
   }
 
+  // Create renderer
   m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED);
   if (m_pRenderer == nullptr)
   {
@@ -66,7 +69,6 @@ bool Game::init()
 
 void Game::clean()
 {
-  freeAssets();
   freeEntities();
 
   SDL_DestroyRenderer(m_pRenderer);
@@ -76,21 +78,17 @@ void Game::clean()
 
 bool Game::loadAssets()
 {
-  TheTextureManager::Instance()->loadTexture(m_pRenderer, "assets/graphics/animate-alpha.png", "animate");
+  // Load animated tiger
+  TheTextureManager::Instance()->loadTexture(
+    m_pRenderer
+    , "assets/graphics/animate-alpha.png", "animate"
+  );
 
   return true;
 }
 
-void Game::freeAssets()
-{
-}
-
 void Game::loadEntities()
 {
-  //entity->load(100, 300, 128, 82, "animate");
-  //player->load(300, 300, 128, 82, "animate");
-  //enemy->load(100, 100, 128, 82, "animate");
-
   m_entities.push_back(
     new Player(
       new LoaderParams(100, 200, 128, 82, "animate")
@@ -125,7 +123,6 @@ int Game::run()
   }
 
   loadEntities();
-
 
   m_running = true;
   while (isRunning())
