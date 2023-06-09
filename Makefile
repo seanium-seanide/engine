@@ -8,10 +8,10 @@ OBJDIR=obj
 
 APP=engine
 BIN=$(BINDIR)/$(APP)
-OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o $(OBJDIR)/Entity.o \
-		$(OBJDIR)/AbstractEntity.o $(OBJDIR)/LoaderParams.o \
-		$(OBJDIR)/Player.o \
-		$(OBJDIR)/Enemy.o
+OBJ=$(OBJDIR)/main.o $(OBJDIR)/Game.o $(OBJDIR)/TextureManager.o \
+		$(OBJDIR)/Entity.o $(OBJDIR)/AbstractEntity.o $(OBJDIR)/LoaderParams.o \
+		$(OBJDIR)/Player.o $(OBJDIR)/Enemy.o \
+		$(OBJDIR)/Vector2D.o
 
 $(BIN): $(OBJ)
 	@mkdir -p $(BINDIR)
@@ -46,6 +46,10 @@ $(OBJDIR)/AbstractEntity.o: $(SRCDIR)/AbstractEntity.cpp $(SRCDIR)/AbstractEntit
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/LoaderParams.o: $(SRCDIR)/LoaderParams.cpp $(SRCDIR)/LoaderParams.hpp
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/Vector2D.o: $(SRCDIR)/Vector2D.cpp $(SRCDIR)/Vector2D.hpp
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
